@@ -3,8 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Фон #101010 -- три изображения</title>
+    <title>Blackjack Premium — Crypto</title>
     <style>
+        :root {
+            --bg-primary: #0a0e0a;
+            --bg-secondary: #111711;
+            --bg-card: #1a1f1a;
+            --gold: #c9a84c;
+            --gold-light: #e0c878;
+            --gold-dark: #8b7020;
+            --green: #2d5a27;
+            --green-light: #3a7a33;
+            --red: #c0392b;
+            --red-light: #e74c3c;
+            --text: #e0e0e0;
+            --text-muted: #888;
+            --border: #2a2a2a;
+            --shadow: 0 4px 24px rgba(0,0,0,0.5);
+            --blue: #3b82f6;
+            --blue-light: #60a5fa;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,45 +31,1219 @@
         }
 
         body {
-            background-color: #101010;
+            background: var(--bg-primary);
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
+            justify-content: center;
             align-items: center;
-            justify-content: flex-start;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            padding: 20px;
+            background-image: 
+                radial-gradient(ellipse at 50% 0%, rgba(45,90,39,0.15) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 100%, rgba(201,168,76,0.05) 0%, transparent 40%);
+        }
+
+        .game-container {
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            padding: 0;
+            box-shadow: var(--shadow), 0 0 0 1px var(--border);
+            max-width: 820px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        /* Header */
+        .header {
+            background: var(--bg-card);
+            border-bottom: 1px solid var(--border);
+            padding: 16px 28px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 34px;
+            height: 34px;
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-size: 1.25em;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.3px;
+        }
+
+        .logo-text span {
+            color: var(--gold);
+        }
+
+        /* Balance Display */
+        .balance-display {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .balance-pill {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: default;
+        }
+
+        .balance-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .balance-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .balance-amount {
+            font-weight: 700;
+            font-size: 1em;
+            color: var(--text);
+        }
+
+        .balance-label {
+            font-size: 0.75em;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .deposit-btn {
+            background: var(--blue);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 0.8em;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .deposit-btn:hover {
+            background: var(--blue-light);
+            transform: translateY(-1px);
+        }
+
+        .deposit-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .stats-pills {
+            display: flex;
+            gap: 8px;
+        }
+
+        .stat-pill {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 6px 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8em;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .stat-pill .value {
+            color: var(--text);
+            font-weight: 700;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .stat-pill.wins .value { color: var(--gold); }
+        .stat-pill.losses .value { color: var(--red-light); }
+        .stat-pill.draws .value { color: var(--text-muted); }
+
+        .stat-pill.pulse .value {
+            animation: statPulse 0.5s ease;
+        }
+
+        @keyframes statPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+
+        /* Game Area */
+        .game-area {
+            padding: 28px;
+        }
+
+        /* Betting Area */
+        .betting-area {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .betting-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .betting-title {
+            font-size: 0.85em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .current-bet {
+            font-weight: 700;
+            color: var(--gold);
+            font-size: 1.1em;
+        }
+
+        .bet-controls {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .chip-btn {
+            background: var(--bg-primary);
+            border: 2px solid var(--border);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 700;
+            font-size: 0.75em;
+            color: var(--text);
+        }
+
+        .chip-btn:hover {
+            border-color: var(--gold);
+            color: var(--gold);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(201,168,76,0.2);
+        }
+
+        .chip-btn.selected {
+            border-color: var(--gold);
+            background: rgba(201,168,76,0.1);
+            color: var(--gold);
+            box-shadow: 0 0 16px rgba(201,168,76,0.3);
+        }
+
+        .bet-amount-input {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 14px;
+            color: var(--text);
+            font-size: 0.9em;
+            font-weight: 600;
+            width: 100px;
+            text-align: center;
+            font-family: inherit;
+        }
+
+        .bet-amount-input:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        .section {
+            margin-bottom: 24px;
+        }
+
+        .section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .section-label {
+            font-size: 0.75em;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .section-score {
+            font-size: 0.9em;
+            font-weight: 600;
+            color: var(--text);
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 4px 12px;
+            transition: all 0.3s ease;
+        }
+
+        .section-score.bust {
+            color: var(--red-light);
+            border-color: rgba(192,57,43,0.3);
+            animation: scoreShake 0.5s ease;
+        }
+
+        .section-score.blackjack {
+            color: var(--gold);
+            border-color: rgba(201,168,76,0.3);
+            animation: scoreGlow 1s ease;
+        }
+
+        @keyframes scoreShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @keyframes scoreGlow {
+            0%, 100% { box-shadow: 0 0 0 rgba(201,168,76,0); }
+            50% { box-shadow: 0 0 20px rgba(201,168,76,0.3); }
+        }
+
+        .cards-row {
+            display: flex;
+            gap: 10px;
+            min-height: 125px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .cards-row:empty::after {
+            content: 'Пусто';
+            color: var(--text-muted);
+            font-size: 0.85em;
+            font-style: italic;
+        }
+
+        /* Card animations */
+        .card-wrapper {
+            animation: cardDeal 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform-origin: bottom center;
+        }
+
+        .card-wrapper:nth-child(1) { animation-delay: 0s; }
+        .card-wrapper:nth-child(2) { animation-delay: 0.1s; }
+        .card-wrapper:nth-child(3) { animation-delay: 0.2s; }
+        .card-wrapper:nth-child(4) { animation-delay: 0.3s; }
+        .card-wrapper:nth-child(5) { animation-delay: 0.4s; }
+        .card-wrapper:nth-child(6) { animation-delay: 0.5s; }
+
+        @keyframes cardDeal {
+            0% {
+                opacity: 0;
+                transform: translateY(-30px) rotate(-5deg) scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
+        }
+
+        .card-wrapper.flip-animation {
+            animation: cardFlip 0.6s ease;
+        }
+
+        @keyframes cardFlip {
+            0% { transform: rotateY(0deg); }
+            50% { transform: rotateY(90deg); }
+            100% { transform: rotateY(0deg); }
+        }
+
+        .card-svg {
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+            transition: all 0.2s ease;
+            cursor: default;
+        }
+
+        .card-svg:hover {
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.5));
+            transform: translateY(-2px);
+        }
+
+        .divider {
+            border: none;
+            border-top: 1px solid var(--border);
+            margin: 24px 0;
+        }
+
+        /* Message Bar */
+        .message-bar {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 14px 20px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.95em;
+            color: var(--text);
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            animation: messageSlideIn 0.4s ease;
+        }
+
+        @keyframes messageSlideIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-bar.win {
+            border-color: rgba(201,168,76,0.4);
+            color: var(--gold-light);
+            background: rgba(201,168,76,0.05);
+        }
+
+        .message-bar.lose {
+            border-color: rgba(192,57,43,0.4);
+            color: var(--red-light);
+            background: rgba(192,57,43,0.05);
+        }
+
+        .message-bar.draw {
+            border-color: rgba(136,136,136,0.4);
+            color: var(--text-muted);
+        }
+
+        /* Controls */
+        .controls {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            font-size: 0.9em;
+            font-weight: 600;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            letter-spacing: 0.3px;
+            border: 1px solid transparent;
+            font-family: inherit;
+            outline: none;
             position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
-        .top-image {
-            display: block;
-            max-width: 100%;
-            height: auto;
-        }
-
-        .center-image {
-            display: block;
-            max-width: 90%;
-            height: auto;
+        .btn::after {
+            content: '';
             position: absolute;
             top: 50%;
             left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
             transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
         }
 
-        .bottom-image {
-            display: block;
-            max-width: 90%;
-            height: auto;
-            position: absolute;
-            bottom: 200px;
-            left: 50%;
-            transform: translateX(-50%);
+        .btn:active::after {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn:focus-visible {
+            box-shadow: 0 0 0 3px rgba(201,168,76,0.3);
+        }
+
+        .btn svg {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+
+        .btn-primary {
+            background: var(--gold);
+            color: #1a1a1a;
+            border-color: var(--gold-dark);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--gold-light);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 16px rgba(201,168,76,0.25);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border-color: var(--border);
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: var(--bg-card);
+            border-color: #444;
+        }
+
+        .btn-danger {
+            background: transparent;
+            color: var(--red-light);
+            border-color: rgba(192,57,43,0.3);
+        }
+
+        .btn-danger:hover:not(:disabled) {
+            background: rgba(192,57,43,0.08);
+            border-color: rgba(192,57,43,0.5);
+        }
+
+        .btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: none !important;
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.3;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            animation: fadeIn 0.2s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 420px;
+            width: 90%;
+            box-shadow: var(--shadow);
+        }
+
+        .modal-title {
+            font-size: 1.2em;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .modal-title-icon {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-title-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .qr-code {
+            background: white;
+            width: 180px;
+            height: 180px;
+            margin: 0 auto 20px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--border);
+        }
+
+        .qr-code svg {
+            width: 140px;
+            height: 140px;
+        }
+
+        .wallet-address {
+            background: var(--bg-primary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            font-family: monospace;
+            font-size: 0.8em;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            word-break: break-all;
+            user-select: all;
+        }
+
+        .modal-close {
+            width: 100%;
+            padding: 10px;
+            background: var(--border);
+            border: none;
+            border-radius: 8px;
+            color: var(--text);
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 0.9em;
+        }
+
+        .modal-close:hover {
+            background: #3a3a3a;
+        }
+
+        @media (max-width: 600px) {
+            .header {
+                flex-direction: column;
+                gap: 10px;
+                padding: 14px 18px;
+            }
+
+            .game-area {
+                padding: 18px;
+            }
+
+            .controls {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .cards-row {
+                justify-content: center;
+            }
+
+            .bet-controls {
+                justify-content: center;
+            }
+
+            .balance-display {
+                width: 100%;
+                justify-content: space-between;
+            }
         }
     </style>
 </head>
 <body>
-    <img class="top-image" src="20260430_140817.png" alt="53.png">
-    <img class="center-image" src="20260430_142919.png" alt="p">
-    <img class="bottom-image" src="20260430_144522.png" alt="20260430_144522.png">
+    <div class="game-container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <img src="card.png" alt="Card">
+                </div>
+                <div class="logo-text">Black<span>jack</span></div>
+            </div>
+            
+            <div class="balance-display">
+                <div class="balance-pill">
+                    <div class="balance-icon">
+                        <img src="ton.png" alt="TON">
+                    </div>
+                    <div>
+                        <div class="balance-label">Баланс</div>
+                        <div class="balance-amount" id="balance">0.00 TON</div>
+                    </div>
+                </div>
+                <button class="deposit-btn" id="deposit-btn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14"/>
+                    </svg>
+                    Пополнить
+                </button>
+            </div>
+
+            <div class="stats-pills">
+                <div class="stat-pill wins" id="wins-pill">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.56 5.82 22 7 14.14l-5-4.87 6.91-1.01z"/></svg>
+                    <span class="value" id="wins">0</span>
+                </div>
+                <div class="stat-pill losses" id="losses-pill">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>
+                    <span class="value" id="losses">0</span>
+                </div>
+                <div class="stat-pill draws" id="draws-pill">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/></svg>
+                    <span class="value" id="draws">0</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Game Area -->
+        <div class="game-area">
+            <!-- Betting Area -->
+            <div class="betting-area" id="betting-area">
+                <div class="betting-header">
+                    <span class="betting-title">Ставка</span>
+                    <span class="current-bet" id="current-bet-display">0.00 TON</span>
+                </div>
+                <div class="bet-controls">
+                    <button class="chip-btn" data-bet="0.1">0.1</button>
+                    <button class="chip-btn" data-bet="0.5">0.5</button>
+                    <button class="chip-btn" data-bet="1">1</button>
+                    <button class="chip-btn" data-bet="2">2</button>
+                    <button class="chip-btn" data-bet="5">5</button>
+                    <input type="number" class="bet-amount-input" id="bet-input" placeholder="Сумма" step="0.1" min="0.1">
+                </div>
+            </div>
+
+            <!-- Dealer -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-label">Дилер</span>
+                    <span class="section-score" id="dealer-score">—</span>
+                </div>
+                <div class="cards-row" id="dealer-cards"></div>
+            </div>
+
+            <hr class="divider">
+
+            <!-- Player -->
+            <div class="section">
+                <div class="section-header">
+                    <span class="section-label">Игрок</span>
+                    <span class="section-score" id="player-score">—</span>
+                </div>
+                <div class="cards-row" id="player-cards"></div>
+            </div>
+
+            <!-- Message -->
+            <div class="message-bar" id="message">Сделайте ставку и начните игру</div>
+
+            <!-- Controls -->
+            <div class="controls">
+                <button class="btn btn-primary" id="new-game-btn">
+                    <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 1.5a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zm-.5 2v3h-3v1h3v3h1v-3h3v-1h-3v-3h-1z"/></svg>
+                    Играть
+                </button>
+                <button class="btn btn-secondary" id="hit-btn" disabled>
+                    <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1v6H2v2h6v6h2V9h6V7h-6V1H8z"/></svg>
+                    Взять
+                </button>
+                <button class="btn btn-danger" id="stand-btn" disabled>
+                    <svg viewBox="0 0 16 16" fill="currentColor"><rect x="3" y="1" width="3" height="14" rx="1"/><rect x="10" y="1" width="3" height="14" rx="1"/></svg>
+                    Хватит
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deposit Modal -->
+    <div class="modal-overlay" id="deposit-modal" style="display: none;">
+        <div class="modal">
+            <div class="modal-title">
+                <div class="modal-title-icon">
+                    <img src="send.png" alt="Send">
+                </div>
+                Пополнение через Crypto Bot
+            </div>
+            
+            <div class="qr-code">
+                <svg viewBox="0 0 140 140">
+                    <rect x="10" y="10" width="30" height="30" fill="none" stroke="#000" stroke-width="4"/>
+                    <rect x="15" y="15" width="20" height="20" fill="#000"/>
+                    <rect x="100" y="10" width="30" height="30" fill="none" stroke="#000" stroke-width="4"/>
+                    <rect x="105" y="15" width="20" height="20" fill="#000"/>
+                    <rect x="10" y="100" width="30" height="30" fill="none" stroke="#000" stroke-width="4"/>
+                    <rect x="15" y="105" width="20" height="20" fill="#000"/>
+                    <rect x="50" y="15" width="8" height="8" fill="#000"/>
+                    <rect x="70" y="15" width="8" height="8" fill="#000"/>
+                    <rect x="90" y="15" width="8" height="8" fill="#000"/>
+                    <rect x="50" y="35" width="8" height="8" fill="#000"/>
+                    <rect x="80" y="35" width="8" height="8" fill="#000"/>
+                    <rect x="60" y="55" width="8" height="8" fill="#000"/>
+                    <rect x="90" y="55" width="8" height="8" fill="#000"/>
+                    <rect x="50" y="75" width="8" height="8" fill="#000"/>
+                    <rect x="70" y="75" width="8" height="8" fill="#000"/>
+                    <rect x="100" y="75" width="8" height="8" fill="#000"/>
+                    <rect x="60" y="95" width="8" height="8" fill="#000"/>
+                    <rect x="80" y="95" width="8" height="8" fill="#000"/>
+                    <rect x="50" y="115" width="8" height="8" fill="#000"/>
+                    <rect x="70" y="115" width="8" height="8" fill="#000"/>
+                    <rect x="90" y="115" width="8" height="8" fill="#000"/>
+                </svg>
+            </div>
+
+            <div class="wallet-address" id="wallet-address">
+                EQBvW8Z8...XyZ_abc123def
+            </div>
+
+            <p style="color: var(--text-muted); font-size: 0.8em; text-align: center; margin-bottom: 16px;">
+                Отправьте TON на этот адрес через @CryptoBot или любой кошелёк. Баланс обновится автоматически.
+            </p>
+
+            <button class="modal-close" id="modal-close">Закрыть</button>
+        </div>
+    </div>
+
+    <script>
+        class BlackjackGame {
+            constructor() {
+                this.deck = [];
+                this.playerHand = [];
+                this.dealerHand = [];
+                this.gameOver = true;
+                this.gameInProgress = false;
+                this.currentBet = 0;
+                this.balance = 10.0;
+                this.stats = { wins: 0, losses: 0, draws: 0 };
+                this.selectedChip = null;
+                this.init();
+            }
+
+            init() {
+                document.getElementById('new-game-btn').addEventListener('click', () => this.startNewGame());
+                document.getElementById('hit-btn').addEventListener('click', () => this.hit());
+                document.getElementById('stand-btn').addEventListener('click', () => this.stand());
+                document.getElementById('deposit-btn').addEventListener('click', () => this.openDepositModal());
+                document.getElementById('modal-close').addEventListener('click', () => this.closeDepositModal());
+                
+                document.querySelectorAll('.chip-btn').forEach(btn => {
+                    btn.addEventListener('click', () => this.selectChip(btn));
+                });
+
+                document.getElementById('bet-input').addEventListener('input', (e) => {
+                    this.handleCustomBet(e.target.value);
+                });
+
+                document.getElementById('deposit-modal').addEventListener('click', (e) => {
+                    if (e.target === e.currentTarget) this.closeDepositModal();
+                });
+
+                this.updateBalanceDisplay();
+                this.updateStatsDisplay();
+                this.updateButtonStates();
+            }
+
+            selectChip(btn) {
+                document.querySelectorAll('.chip-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                this.selectedChip = btn;
+                const betAmount = parseFloat(btn.dataset.bet);
+                this.currentBet = betAmount;
+                document.getElementById('bet-input').value = betAmount;
+                this.updateBetDisplay();
+            }
+
+            handleCustomBet(value) {
+                document.querySelectorAll('.chip-btn').forEach(b => b.classList.remove('selected'));
+                this.selectedChip = null;
+                const betAmount = parseFloat(value) || 0;
+                this.currentBet = Math.max(0, betAmount);
+                this.updateBetDisplay();
+            }
+
+            updateBetDisplay() {
+                document.getElementById('current-bet-display').textContent = 
+                    `${this.currentBet.toFixed(2)} TON`;
+            }
+
+            updateBalanceDisplay() {
+                document.getElementById('balance').textContent = 
+                    `${this.balance.toFixed(2)} TON`;
+            }
+
+            updateStatsDisplay() {
+                document.getElementById('wins').textContent = this.stats.wins;
+                document.getElementById('losses').textContent = this.stats.losses;
+                document.getElementById('draws').textContent = this.stats.draws;
+            }
+
+            updateButtonStates() {
+                const newGameBtn = document.getElementById('new-game-btn');
+                const hitBtn = document.getElementById('hit-btn');
+                const standBtn = document.getElementById('stand-btn');
+                const bettingArea = document.getElementById('betting-area');
+                
+                if (this.gameInProgress) {
+                    newGameBtn.disabled = true;
+                    hitBtn.disabled = false;
+                    standBtn.disabled = false;
+                    bettingArea.style.opacity = '0.5';
+                    bettingArea.style.pointerEvents = 'none';
+                } else {
+                    newGameBtn.disabled = false;
+                    hitBtn.disabled = true;
+                    standBtn.disabled = true;
+                    bettingArea.style.opacity = '1';
+                    bettingArea.style.pointerEvents = 'auto';
+                }
+            }
+
+            openDepositModal() {
+                document.getElementById('deposit-modal').style.display = 'flex';
+            }
+
+            closeDepositModal() {
+                document.getElementById('deposit-modal').style.display = 'none';
+            }
+
+            createDeck() {
+                const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
+                const values = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K'];
+                const deck = [];
+                for (let suit of suits) {
+                    for (let value of values) {
+                        deck.push({ suit, value });
+                    }
+                }
+                for (let i = deck.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [deck[i], deck[j]] = [deck[j], deck[i]];
+                }
+                return deck;
+            }
+
+            getCardValue(card) {
+                if (card.value === 'A') return 11;
+                if (['K', 'Q', 'J'].includes(card.value)) return 10;
+                return parseInt(card.value);
+            }
+
+            calculateHandValue(hand) {
+                let value = 0;
+                let aces = 0;
+                for (let card of hand) {
+                    if (card.value === 'A') aces++;
+                    value += this.getCardValue(card);
+                }
+                while (value > 21 && aces > 0) {
+                    value -= 10;
+                    aces--;
+                }
+                return value;
+            }
+
+            createCardSVG(card, hidden = false) {
+                const svgNs = "http://www.w3.org/2000/svg";
+                const svg = document.createElementNS(svgNs, "svg");
+                svg.setAttribute("width", "80");
+                svg.setAttribute("height", "116");
+                svg.setAttribute("viewBox", "0 0 80 116");
+                svg.classList.add("card-svg");
+
+                const defs = document.createElementNS(svgNs, "defs");
+                const cardGradient = document.createElementNS(svgNs, "linearGradient");
+                cardGradient.setAttribute("id", `cg-${Math.random().toString(36).substr(2,6)}`);
+                cardGradient.setAttribute("x1", "0%");
+                cardGradient.setAttribute("y1", "0%");
+                cardGradient.setAttribute("x2", "100%");
+                cardGradient.setAttribute("y2", "100%");
+                
+                const s1 = document.createElementNS(svgNs, "stop");
+                s1.setAttribute("offset", "0%");
+                s1.setAttribute("stop-color", hidden ? "#1a2030" : "#f5f5f0");
+                const s2 = document.createElementNS(svgNs, "stop");
+                s2.setAttribute("offset", "100%");
+                s2.setAttribute("stop-color", hidden ? "#252d3d" : "#e8e4d8");
+                
+                cardGradient.appendChild(s1);
+                cardGradient.appendChild(s2);
+                defs.appendChild(cardGradient);
+                svg.appendChild(defs);
+
+                const bg = document.createElementNS(svgNs, "rect");
+                bg.setAttribute("x", "1");
+                bg.setAttribute("y", "1");
+                bg.setAttribute("width", "78");
+                bg.setAttribute("height", "114");
+                bg.setAttribute("rx", "7");
+                bg.setAttribute("fill", `url(#${cardGradient.getAttribute('id')})`);
+                bg.setAttribute("stroke", hidden ? "#2a3344" : "#c0b8a8");
+                bg.setAttribute("stroke-width", "1.5");
+                svg.appendChild(bg);
+
+                if (hidden) {
+                    const inner = document.createElementNS(svgNs, "rect");
+                    inner.setAttribute("x", "7");
+                    inner.setAttribute("y", "7");
+                    inner.setAttribute("width", "66");
+                    inner.setAttribute("height", "102");
+                    inner.setAttribute("rx", "4");
+                    inner.setAttribute("fill", "none");
+                    inner.setAttribute("stroke", "#3a4560");
+                    inner.setAttribute("stroke-width", "1");
+                    inner.setAttribute("stroke-dasharray", "6 4");
+                    svg.appendChild(inner);
+
+                    const diamond = document.createElementNS(svgNs, "polygon");
+                    diamond.setAttribute("points", "40,38 58,58 40,78 22,58");
+                    diamond.setAttribute("fill", "none");
+                    diamond.setAttribute("stroke", "#c9a84c");
+                    diamond.setAttribute("stroke-width", "1.5");
+                    diamond.setAttribute("opacity", "0.7");
+                    svg.appendChild(diamond);
+
+                    const q = document.createElementNS(svgNs, "text");
+                    q.setAttribute("x", "40");
+                    q.setAttribute("y", "64");
+                    q.setAttribute("text-anchor", "middle");
+                    q.setAttribute("fill", "#c9a84c");
+                    q.setAttribute("font-size", "20");
+                    q.setAttribute("font-weight", "bold");
+                    q.setAttribute("font-family", "Georgia, serif");
+                    q.textContent = "?";
+                    svg.appendChild(q);
+                } else {
+                    const isRed = card.suit === 'hearts' || card.suit === 'diamonds';
+                    const color = isRed ? '#c0392b' : '#2c3e50';
+                    const colorLight = isRed ? '#e74c3c' : '#34495e';
+                    const suits = {hearts:'\u2665',diamonds:'\u2666',clubs:'\u2663',spades:'\u2660'};
+
+                    const r = document.createElementNS(svgNs, "text");
+                    r.setAttribute("x", "11");
+                    r.setAttribute("y", "22");
+                    r.setAttribute("fill", color);
+                    r.setAttribute("font-size", "14");
+                    r.setAttribute("font-weight", "700");
+                    r.textContent = card.value;
+                    svg.appendChild(r);
+
+                    const st = document.createElementNS(svgNs, "text");
+                    st.setAttribute("x", "11");
+                    st.setAttribute("y", "37");
+                    st.setAttribute("fill", colorLight);
+                    st.setAttribute("font-size", "12");
+                    st.textContent = suits[card.suit];
+                    svg.appendChild(st);
+
+                    const cs = document.createElementNS(svgNs, "text");
+                    cs.setAttribute("x", "40");
+                    cs.setAttribute("y", "78");
+                    cs.setAttribute("text-anchor", "middle");
+                    cs.setAttribute("fill", colorLight);
+                    cs.setAttribute("font-size", "38");
+                    cs.textContent = suits[card.suit];
+                    svg.appendChild(cs);
+                }
+
+                return svg;
+            }
+
+            displayCards() {
+                const dd = document.getElementById('dealer-cards');
+                const pd = document.getElementById('player-cards');
+                dd.innerHTML = '';
+                pd.innerHTML = '';
+
+                this.dealerHand.forEach((c, i) => {
+                    const w = document.createElement('div');
+                    w.classList.add('card-wrapper');
+                    w.appendChild(this.createCardSVG(c, i === 0 && !this.gameOver));
+                    dd.appendChild(w);
+                });
+
+                this.playerHand.forEach(c => {
+                    const w = document.createElement('div');
+                    w.classList.add('card-wrapper');
+                    w.appendChild(this.createCardSVG(c));
+                    pd.appendChild(w);
+                });
+            }
+
+            updateUI() {
+                this.displayCards();
+                const ps = this.calculateHandValue(this.playerHand);
+                const ds = this.calculateHandValue(this.dealerHand);
+                const dse = document.getElementById('dealer-score');
+                const pse = document.getElementById('player-score');
+                dse.className = 'section-score';
+                pse.className = 'section-score';
+
+                if (this.gameOver) {
+                    dse.textContent = ds;
+                    if (ds > 21) dse.classList.add('bust');
+                    if (ds === 21 && this.dealerHand.length === 2) dse.classList.add('blackjack');
+                } else if (this.dealerHand.length > 0) {
+                    dse.textContent = `? + ${this.getCardValue(this.dealerHand[1])}`;
+                } else {
+                    dse.textContent = '--';
+                }
+
+                if (this.playerHand.length > 0) {
+                    pse.textContent = ps;
+                    if (ps > 21) pse.classList.add('bust');
+                    if (ps === 21 && this.playerHand.length === 2) pse.classList.add('blackjack');
+                } else {
+                    pse.textContent = '--';
+                }
+
+                this.updateButtonStates();
+                this.updateStatsDisplay();
+            }
+
+            animateStat(type) {
+                const pill = document.getElementById(`${type}-pill`);
+                pill.classList.add('pulse');
+                setTimeout(() => pill.classList.remove('pulse'), 500);
+            }
+
+            setMessage(text, type = '') {
+                const msg = document.getElementById('message');
+                msg.textContent = text;
+                msg.className = 'message-bar';
+                if (type) msg.classList.add(type);
+                msg.style.animation = 'none';
+                msg.offsetHeight;
+                msg.style.animation = 'messageSlideIn 0.4s ease';
+            }
+
+            flipDealerCard() {
+                const cards = document.getElementById('dealer-cards').children;
+                if (cards.length > 0) {
+                    cards[0].classList.add('flip-animation');
+                    setTimeout(() => {
+                        cards[0].innerHTML = '';
+                        cards[0].appendChild(this.createCardSVG(this.dealerHand[0]));
+                    }, 300);
+                }
+            }
+
+            startNewGame() {
+                if (this.gameInProgress) return;
+                if (this.currentBet <= 0) { this.setMessage('Укажите сумму ставки', 'lose'); return; }
+                if (this.currentBet > this.balance) { this.setMessage('Недостаточно средств', 'lose'); return; }
+
+                this.balance -= this.currentBet;
+                this.updateBalanceDisplay();
+                this.gameInProgress = true;
+                this.deck = this.createDeck();
+                this.playerHand = [this.deck.pop(), this.deck.pop()];
+                this.dealerHand = [this.deck.pop(), this.deck.pop()];
+                this.gameOver = false;
+                this.setMessage(`Ставка: ${this.currentBet.toFixed(2)} TON — Ваш ход`);
+                if (this.calculateHandValue(this.playerHand) === 21) this.stand();
+                this.updateUI();
+            }
+
+            hit() {
+                if (this.gameOver) return;
+                this.playerHand.push(this.deck.pop());
+                if (this.calculateHandValue(this.playerHand) > 21) {
+                    this.gameOver = true;
+                    this.gameInProgress = false;
+                    this.setMessage(`Перебор! -${this.currentBet.toFixed(2)} TON`, 'lose');
+                    this.stats.losses++;
+                    this.animateStat('losses');
+                    this.flipDealerCard();
+                } else if (this.calculateHandValue(this.playerHand) === 21) {
+                    this.stand();
+                }
+                this.updateUI();
+            }
+
+            stand() {
+                if (this.gameOver) return;
+                this.gameOver = true;
+                this.gameInProgress = false;
+                this.flipDealerCard();
+                setTimeout(() => {
+                    while (this.calculateHandValue(this.dealerHand) < 17) {
+                        this.dealerHand.push(this.deck.pop());
+                    }
+                    const ps = this.calculateHandValue(this.playerHand);
+                    const ds = this.calculateHandValue(this.dealerHand);
+                    let win = 0;
+
+                    if (ds > 21) {
+                        win = this.currentBet * 2;
+                        this.balance += win;
+                        this.setMessage(`Победа! +${win.toFixed(2)} TON`, 'win');
+                        this.stats.wins++;
+                    } else if (ds > ps) {
+                        this.setMessage(`Поражение. -${this.currentBet.toFixed(2)} TON`, 'lose');
+                        this.stats.losses++;
+                    } else if (ds < ps) {
+                        const bj = ps === 21 && this.playerHand.length === 2;
+                        win = bj ? this.currentBet * 2.5 : this.currentBet * 2;
+                        this.balance += win;
+                        this.setMessage(`Победа${bj?' (Блэкджек!)':''}! +${win.toFixed(2)} TON`, 'win');
+                        this.stats.wins++;
+                    } else {
+                        this.balance += this.currentBet;
+                        this.setMessage(`Ничья. Возврат: ${this.currentBet.toFixed(2)} TON`, 'draw');
+                        this.stats.draws++;
+                    }
+                    if (this.stats.wins) this.animateStat('wins');
+                    if (this.stats.losses) this.animateStat('losses');
+                    if (this.stats.draws) this.animateStat('draws');
+                    this.updateBalanceDisplay();
+                    this.updateUI();
+                }, 700);
+            }
+        }
+
+        new BlackjackGame();
+    </script>
 </body>
-</html>
+            </html>
