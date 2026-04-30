@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Фон #101010 — два изображения</title>
+    <title>Фон #101010 -- три изображения</title>
     <style>
         * {
             margin: 0;
@@ -18,32 +18,39 @@
             flex-direction: column;
             align-items: center;
             justify-content: flex-start;
+            position: relative;
         }
 
-        /* Верхнее изображение (прижато к верху) */
         .top-image {
             display: block;
             max-width: 100%;
             height: auto;
         }
 
-        /* Центральное изображение */
         .center-image {
             display: block;
-            max-width: 100%;
+            max-width: 90%;
             height: auto;
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
         }
+
+        .bottom-image {
+            display: block;
+            max-width: 90%;
+            height: auto;
+            position: absolute;
+            bottom: 200px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
     </style>
 </head>
 <body>
-    <!-- Сверху -->
     <img class="top-image" src="20260430_140817.png" alt="53.png">
-
-    <!-- Точно по центру экрана -->
-    <img class="center-image" src="20260430_142919.png" alt="54.png">
+    <img class="center-image" src="20260430_142919.png" alt="p">
+    <img class="bottom-image" src="20260430_144522.png" alt="20260430_144522.png">
 </body>
 </html>
