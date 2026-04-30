@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Фон #101010 — два изображения</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: #101010;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        /* Верхнее изображение (прижато к верху) */
+        .top-image {
+            display: block;
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Центральное изображение */
+        .center-image {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+    </style>
+</head>
+<body>
+    <!-- Сверху -->
+    <img class="top-image" src="53.png" alt="53.png">
+
+    <!-- Точно по центру экрана -->
+    <img class="center-image" src="54.png" alt="54.png">
+</body>
+</html>
