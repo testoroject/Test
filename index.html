@@ -6,19 +6,19 @@
     <title>Blackjack Premium — Crypto</title>
     <style>
         :root {
-            --bg-primary: #0a0e0a;
-            --bg-secondary: #111711;
-            --bg-card: #1a1f1a;
-            --gold: #c9a84c;
-            --gold-light: #e0c878;
-            --gold-dark: #8b7020;
+            --bg-primary: #0a0e14;
+            --bg-secondary: #111720;
+            --bg-card: #1a202a;
+            --accent: #3b82f6;
+            --accent-light: #60a5fa;
+            --accent-dark: #1d4ed8;
             --green: #2d5a27;
             --green-light: #3a7a33;
             --red: #c0392b;
             --red-light: #e74c3c;
             --text: #e0e0e0;
             --text-muted: #888;
-            --border: #2a2a2a;
+            --border: #2a3040;
             --shadow: 0 4px 24px rgba(0,0,0,0.5);
             --blue: #3b82f6;
             --blue-light: #60a5fa;
@@ -39,8 +39,76 @@
             font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
             padding: 20px;
             background-image: 
-                radial-gradient(ellipse at 50% 0%, rgba(45,90,39,0.15) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 100%, rgba(201,168,76,0.05) 0%, transparent 40%);
+                radial-gradient(ellipse at 50% 0%, rgba(59,130,246,0.1) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 100%, rgba(59,130,246,0.05) 0%, transparent 40%);
+        }
+
+        /* Loader Screen */
+        .loader-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease, visibility 0.5s ease;
+        }
+
+        .loader-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .loader-logo {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 30px;
+            animation: loaderPulse 2s ease-in-out infinite;
+        }
+
+        .loader-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        @keyframes loaderPulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+        }
+
+        .loader-bar {
+            width: 200px;
+            height: 3px;
+            background: var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .loader-bar-fill {
+            height: 100%;
+            background: var(--accent);
+            border-radius: 3px;
+            animation: loaderBar 2s ease-in-out infinite;
+        }
+
+        @keyframes loaderBar {
+            0% { width: 0%; }
+            50% { width: 80%; }
+            100% { width: 100%; }
+        }
+
+        .loader-text {
+            color: var(--text-muted);
+            font-size: 0.85em;
+            margin-top: 16px;
+            letter-spacing: 1px;
         }
 
         .game-container {
@@ -74,7 +142,7 @@
         .logo-icon {
             width: 34px;
             height: 34px;
-            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+            background: linear-gradient(135deg, var(--accent-dark), var(--accent));
             border-radius: 8px;
             display: flex;
             align-items: center;
@@ -96,7 +164,7 @@
         }
 
         .logo-text span {
-            color: var(--gold);
+            color: var(--accent-light);
         }
 
         /* Balance Display */
@@ -190,7 +258,7 @@
             transition: all 0.3s ease;
         }
 
-        .stat-pill.wins .value { color: var(--gold); }
+        .stat-pill.wins .value { color: var(--accent-light); }
         .stat-pill.losses .value { color: var(--red-light); }
         .stat-pill.draws .value { color: var(--text-muted); }
 
@@ -234,7 +302,7 @@
 
         .current-bet {
             font-weight: 700;
-            color: var(--gold);
+            color: var(--accent-light);
             font-size: 1.1em;
         }
 
@@ -262,17 +330,17 @@
         }
 
         .chip-btn:hover {
-            border-color: var(--gold);
-            color: var(--gold);
+            border-color: var(--accent);
+            color: var(--accent-light);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(201,168,76,0.2);
+            box-shadow: 0 4px 12px rgba(59,130,246,0.2);
         }
 
         .chip-btn.selected {
-            border-color: var(--gold);
-            background: rgba(201,168,76,0.1);
-            color: var(--gold);
-            box-shadow: 0 0 16px rgba(201,168,76,0.3);
+            border-color: var(--accent);
+            background: rgba(59,130,246,0.1);
+            color: var(--accent-light);
+            box-shadow: 0 0 16px rgba(59,130,246,0.3);
         }
 
         .bet-amount-input {
@@ -290,7 +358,7 @@
 
         .bet-amount-input:focus {
             outline: none;
-            border-color: var(--gold);
+            border-color: var(--accent);
         }
 
         .section {
@@ -334,8 +402,8 @@
         }
 
         .section-score.blackjack {
-            color: var(--gold);
-            border-color: rgba(201,168,76,0.3);
+            color: var(--accent-light);
+            border-color: rgba(59,130,246,0.3);
             animation: scoreGlow 1s ease;
         }
 
@@ -346,8 +414,8 @@
         }
 
         @keyframes scoreGlow {
-            0%, 100% { box-shadow: 0 0 0 rgba(201,168,76,0); }
-            50% { box-shadow: 0 0 20px rgba(201,168,76,0.3); }
+            0%, 100% { box-shadow: 0 0 0 rgba(59,130,246,0); }
+            50% { box-shadow: 0 0 20px rgba(59,130,246,0.3); }
         }
 
         .cards-row {
@@ -365,7 +433,6 @@
             font-style: italic;
         }
 
-        /* Card animations */
         .card-wrapper {
             animation: cardDeal 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
             transform-origin: bottom center;
@@ -416,7 +483,6 @@
             margin: 24px 0;
         }
 
-        /* Message Bar */
         .message-bar {
             background: var(--bg-card);
             border: 1px solid var(--border);
@@ -432,20 +498,14 @@
         }
 
         @keyframes messageSlideIn {
-            0% {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            0% { opacity: 0; transform: translateY(-10px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
 
         .message-bar.win {
-            border-color: rgba(201,168,76,0.4);
-            color: var(--gold-light);
-            background: rgba(201,168,76,0.05);
+            border-color: rgba(59,130,246,0.4);
+            color: var(--accent-light);
+            background: rgba(59,130,246,0.05);
         }
 
         .message-bar.lose {
@@ -459,7 +519,6 @@
             color: var(--text-muted);
         }
 
-        /* Controls */
         .controls {
             display: flex;
             gap: 12px;
@@ -503,7 +562,7 @@
         }
 
         .btn:focus-visible {
-            box-shadow: 0 0 0 3px rgba(201,168,76,0.3);
+            box-shadow: 0 0 0 3px rgba(59,130,246,0.3);
         }
 
         .btn svg {
@@ -513,15 +572,15 @@
         }
 
         .btn-primary {
-            background: var(--gold);
-            color: #1a1a1a;
-            border-color: var(--gold-dark);
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent-dark);
         }
 
         .btn-primary:hover:not(:disabled) {
-            background: var(--gold-light);
+            background: var(--accent-light);
             transform: translateY(-1px);
-            box-shadow: 0 4px 16px rgba(201,168,76,0.25);
+            box-shadow: 0 4px 16px rgba(59,130,246,0.3);
         }
 
         .btn-secondary {
@@ -695,6 +754,17 @@
     </style>
 </head>
 <body>
+    <!-- Loader Screen -->
+    <div class="loader-screen" id="loader">
+        <div class="loader-logo">
+            <img src="login.png" alt="Login">
+        </div>
+        <div class="loader-bar">
+            <div class="loader-bar-fill"></div>
+        </div>
+        <div class="loader-text">ЗАГРУЗКА</div>
+    </div>
+
     <div class="game-container">
         <!-- Header -->
         <div class="header">
@@ -741,7 +811,6 @@
 
         <!-- Game Area -->
         <div class="game-area">
-            <!-- Betting Area -->
             <div class="betting-area" id="betting-area">
                 <div class="betting-header">
                     <span class="betting-title">Ставка</span>
@@ -757,7 +826,6 @@
                 </div>
             </div>
 
-            <!-- Dealer -->
             <div class="section">
                 <div class="section-header">
                     <span class="section-label">Дилер</span>
@@ -768,7 +836,6 @@
 
             <hr class="divider">
 
-            <!-- Player -->
             <div class="section">
                 <div class="section-header">
                     <span class="section-label">Игрок</span>
@@ -777,10 +844,8 @@
                 <div class="cards-row" id="player-cards"></div>
             </div>
 
-            <!-- Message -->
             <div class="message-bar" id="message">Сделайте ставку и начните игру</div>
 
-            <!-- Controls -->
             <div class="controls">
                 <button class="btn btn-primary" id="new-game-btn">
                     <svg viewBox="0 0 16 16" fill="currentColor"><path d="M8 1a7 7 0 1 0 0 14A7 7 0 0 0 8 1zm0 1.5a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11zm-.5 2v3h-3v1h3v3h1v-3h3v-1h-3v-3h-1z"/></svg>
@@ -847,6 +912,13 @@
     </div>
 
     <script>
+        // Загрузочный экран
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+            }, 2000);
+        });
+
         class BlackjackGame {
             constructor() {
                 this.deck = [];
@@ -1039,7 +1111,7 @@
                     const diamond = document.createElementNS(svgNs, "polygon");
                     diamond.setAttribute("points", "40,38 58,58 40,78 22,58");
                     diamond.setAttribute("fill", "none");
-                    diamond.setAttribute("stroke", "#c9a84c");
+                    diamond.setAttribute("stroke", "#60a5fa");
                     diamond.setAttribute("stroke-width", "1.5");
                     diamond.setAttribute("opacity", "0.7");
                     svg.appendChild(diamond);
@@ -1048,7 +1120,7 @@
                     q.setAttribute("x", "40");
                     q.setAttribute("y", "64");
                     q.setAttribute("text-anchor", "middle");
-                    q.setAttribute("fill", "#c9a84c");
+                    q.setAttribute("fill", "#60a5fa");
                     q.setAttribute("font-size", "20");
                     q.setAttribute("font-weight", "bold");
                     q.setAttribute("font-family", "Georgia, serif");
@@ -1246,4 +1318,4 @@
         new BlackjackGame();
     </script>
 </body>
-            </html>
+                        </html>
